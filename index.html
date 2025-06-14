@@ -123,7 +123,6 @@
         width: 100%; /* Default 100% width, constrained by max-width */
         box-sizing: border-box; /* Include padding in width calculation */
         padding: 0 10px; /* Default side padding for all screens */
-        /* margin: auto; - Removed this from .container as body's flexbox centers it */
     }
 
     /* Card styling */
@@ -137,9 +136,8 @@
         flex-direction: column;
         align-items: center; /* Centers content horizontally within the card */
         text-align: center; /* Centers inline text within the card */
-        border-radius: 6px; /* From #card in demo-Styles.css */
-        /*box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);*/ /* From #card in demo-Styles.css */
-        overflow: hidden; /* From #card in demo-Styles.css */
+        border-radius: 6px; /* Keep border-radius if desired for rounded corners */
+        overflow: hidden; /* Keeps content within rounded corners */
     }
 
     .card1 { /* Specific for card1 if used */
@@ -189,7 +187,7 @@
         background-color: #ffffff;
         border-radius: 8px;
         border: 2px solid #59cbe8;
-        height: 60px;
+        height: 60px; /* Fixed height for consistent button size */
         min-width: 250px;
         display: flex;
         align-items: center;
@@ -208,7 +206,7 @@
         font-size: 32px;
         color: #000099;
         font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
-        white-space: nowrap;
+        white-space: nowrap; /* Prevent text from wrapping */
     }
 
     /* Specific spacing for hyperlinks within cards */
@@ -227,7 +225,6 @@
     model-viewer {
         --progress-bar-color: #59cbe8;
         /* Custom progress bar color */
-        /* The inline styles on model-viewer element will take precedence for width/height */
     }
 
     /* Default <model-viewer> AR button hidden */
@@ -237,12 +234,6 @@
 
     /* Video styling */
     video {
-        /* Inline styles on the video element will take precedence */
-        /* Your inline style on the video is:
-           style="width: 375px; max-width: 100%; height: 375px; object-fit: cover; margin: auto; display: block;"
-           If you want `object-fit: contain;` from demo-Styles.css, you must remove `object-fit: cover;` from the inline style.
-           I'm leaving it as `cover` for now to match your HTML's current inline style.
-        */
         object-fit: cover; /* Keeps aspect ratio and fills container, may crop */
     }
 
@@ -269,7 +260,7 @@
     .daisy-text { /* For a specific daisy text element, if used */
         font-family: 'DaisyByhapppyal-Regular', sans-serif;
         color: #000099;
-        font-size: 60px; /* Fixed "60 px" to "60px" */
+        font-size: 60px;
     }
 
     /* Media queries for responsiveness */
@@ -285,11 +276,28 @@
         model-viewer {
             height: 300px; /* Adjust model size for mobile */
         }
+
         /* Adjust AR button for mobile, using its actual class: main-button */
         .main-button {
             width: 90%; /* Make button wider for touch accessibility */
-            font-size: 24px; /* Increase readability */
-            margin-top: 10px;
+            /* Removed font-size here as we'll size the span directly */
+            height: 50px; /* Slightly reduce button height on mobile */
+        }
+
+        /* NEW: Scaling for image and text inside main-button on mobile */
+        .main-button img {
+            height: 3em !important; /* Scale image relative to font size, or a fixed smaller px value */
+            width: auto;
+            margin-right: 3px; /* Slightly reduce margin */
+        }
+
+        .main-button span {
+            font-size: 24px !important; /* Scale text down for mobile */
+        }
+
+        /* Specific override for the "print certificate" button's span to make text fit better */
+        #viewPrintCertificateButton span {
+            font-size: 18px !important; /* Even smaller for this specific button if needed */
         }
     }
 
