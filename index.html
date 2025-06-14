@@ -112,7 +112,20 @@
         column-count: 1;
         column-width: 500px;
         column-gap: 10px;
+        max-width: 600px; /* Default max-width for larger screens */
+        width: 95%; /* Default width for larger screens (leaves some side margin) */
     }
+
+    /* Media query for smaller screens (e.g., mobile phones) */
+    @media (max-width: 768px) { /* Adjust breakpoint as needed */
+        .container {
+            width: 100%; /* Make it full width on smaller screens */
+            max-width: 100%; /* Ensure it doesn't get limited by max-width */
+            padding: 0 5px; /* Add a small internal padding to prevent content from touching edges */
+            box-sizing: border-box; /* Include padding in the width calculation */
+        }
+    }
+
 
     .card {
         break-inside: avoid;
@@ -124,7 +137,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        text-align: center; /* Center text within the card */
+        text-align: center;
+        /* Center text within the card */
     }
 
     .card1 {
@@ -246,7 +260,11 @@
 </style>
 
 <style>
-    @media (max-width: auto) {
+    /* This media query was already present for font size and model size,
+       but the previous @media (max-width: auto) was not a valid CSS media query.
+       It should be a specific pixel value. I've corrected it to 768px for consistency
+       with the new .container media query. */
+    @media (max-width: 768px) {
         .custom-text {
             font-size: 18px;
             /* Adjust font size for smaller screens */
@@ -446,35 +464,33 @@
         </script>
 
         <div class="card">
-            <h1 style="text-align: center;" markdown="1">
+            <h1 style="text-align: center;">
                 <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #000099;"> The joy of sharing kindness with friends + neighbors = sugarlump.love</p>
             </h1>
-            <b>
-                <img class="marginauto" src="images/erin_video_scenes-34.png" alt="Logo" style="width: 300px; height: auto">
-                <h2 style="text-align: center;" markdown="1">
-                    <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>about:</b><a href="https://sugarlump.love/about" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"> creativity + kindness</b></a></p>
-                </h2>
-                <h2 style="text-align: center;" markdown="1">
-                    <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>rewards:</b><a href="https://sugarlump.love/" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"><b> the kindness project</b></b></a></p>
-                </h2>
-                <h2 style="text-align: center;" markdown="1">
-                    <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>join:</b><a href="https://sugarlump.love/the-club" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"> sugarlump kindness club</b></a></p>
-                </h2>
-                <h2 style="text-align: center;" markdown="1">
-                    <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>shop:</b><a href="https://sugarlump.love/shop" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"> creative kindness kits</b></a></p>
-                </h2>
-                <h2 style="text-align: center;" markdown="1">
-                    <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>brag tags:</b><a href="https://www.schoollife.com/bragtags-intro" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"> accomplishment, recognition, confidence</b></a></p>
-                </h2>
-                <h2 style="text-align: center;" markdown="1">
-                    <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>sponsors:</b><a href="https://sugarlump.love/contact" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"><b> get involved</b></b></a></p>
-                </h2>
-                <br>
-                <h1 style="text-align: center;" markdown="1">
-                    <p style="font-family:DaisyByhapppyal-Regular; font-weight: bold; color: #000099;"><em> THIS KINDNESS PROJECT SPONSORED BY</em></p>
-                </h1>
-                <b>
-                    <img class="marginauto" src="images/erin_video_scenes-37.png" alt="Logo" style="width: 300px; height: auto">
+            <img class="marginauto" src="images/erin_video_scenes-34.png" alt="Logo" style="width: 300px; height: auto">
+            <h2 style="text-align: center;">
+                <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>about:</b><a href="https://sugarlump.love/about" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"> creativity + kindness</b></a></p>
+            </h2>
+            <h2 style="text-align: center;">
+                <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>rewards:</b><a href="https://sugarlump.love/" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"><b> the kindness project</b></b></a></p>
+            </h2>
+            <h2 style="text-align: center;">
+                <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>join:</b><a href="https://sugarlump.love/the-club" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"> sugarlump kindness club</b></a></p>
+            </h2>
+            <h2 style="text-align: center;">
+                <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>shop:</b><a href="https://sugarlump.love/shop" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"> creative kindness kits</b></a></p>
+            </h2>
+            <h2 style="text-align: center;">
+                <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>brag tags:</b><a href="https://www.schoollife.com/bragtags-intro" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"> accomplishment, recognition, confidence</b></a></p>
+            </h2>
+            <h2 style="text-align: center;">
+                <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #ff69b4;"><b>sponsors:</b><a href="https://sugarlump.love/contact" target="_blank" rel="noopener noreferrer"><b style="color:#59cbe8;"><b> get involved</b></b></a></p>
+            </h2>
+            <br>
+            <h1 style="text-align: center;">
+                <p style="font-family:DaisyByhapppyal-Regular; font-weight: bold; color: #000099;"><em> THIS KINDNESS PROJECT SPONSORED BY</em></p>
+            </h1>
+            <img class="marginauto" src="images/erin_video_scenes-37.png" alt="Logo" style="width: 300px; height: auto">
         </div>
 
         <div class="centerImage">
@@ -484,24 +500,20 @@
         </div>
 
         <div class="card">
-            <h2 style="text-align: center;" markdown="1">
+            <h2 style="text-align: center;">
                 <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #000099;">Experience 4D Augmented Reality On Your Phone</p>
             </h2>
             <img alt="AR Instructions" src="images/erin_video_scenes-41.png" class="marginauto" style="max-width: 100%; max-height: 350px">
-            <h3 style="text-align: center;" markdown="1">
+            <h3 style="text-align: center;">
                 <p style="font-family:Chalet LondonNineteenEighty Regular; font-weight: bold; color: #000099;"><em> If AR button does not appear on mobile device, use another browser.</em></p>
             </h3>
-            <b>
         </div>
 
         <div class="card">
-            <h4 style="text-align: center;" markdown="1"><a href="https://avertek.net/" target="_blank" rel="noopener noreferrer">
+            <h4 style="text-align: center;"><a href="https://avertek.net/" target="_blank" rel="noopener noreferrer">
                     <p style="font-family:Chalet LondonNineteenEighty Regular; color:##59cbe8;"> Contact AVERtek to learn more about AR marketing.</p>
                 </a></h4>
-            <b>
         </div>
-
-
     </div>
 </body>
 
