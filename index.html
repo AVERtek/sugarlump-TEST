@@ -108,47 +108,41 @@
 </script>
 
 <style>
-    /* Ensure no default margin/padding on html/body */
+    /* Global styles for html and body */
     html, body {
         margin: 0;
         padding: 0;
-        overflow-x: hidden; /* Prevent horizontal scrolling */
+        overflow-x: hidden; /* Prevents horizontal scrolling */
+        font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif; /* Keep generic fonts for broader compatibility */
+        color: #244376; /* Default text color */
     }
 
+    /* Main container styling */
     .container {
-        /* Removed column-count and column-width as they conflict with responsive design */
-        max-width: 600px;
-        /* Default max-width for larger screens */
-        width: 100%; /* Start with 100% width, will be constrained by max-width */
-        box-sizing: border-box; /* Include padding in width */
-        padding: 0 10px; /* Add some default padding for all screen sizes */
+        max-width: 600px; /* Max width for larger screens */
+        width: 100%; /* Default 100% width, constrained by max-width */
+        box-sizing: border-box; /* Include padding in width calculation */
+        padding: 0 10px; /* Default side padding for all screens */
+        /* margin: auto; - Removed this from .container as body's flexbox centers it */
     }
 
-    /* Media query for smaller screens (e.g., mobile phones) */
-    @media (max-width: 768px) {
-        .container {
-            width: 100%; /* Force full width on mobile */
-            max-width: 100%; /* Override max-width for mobile */
-            padding: 0 5px; /* Adjust padding slightly for tighter mobile fit */
-        }
-    }
-
-
+    /* Card styling */
     .card {
-        break-inside: avoid;
+        break-inside: avoid; /* For multi-column layouts, prevents breaking cards */
         background-color: rgb(255, 255, 153);
         border: 2px solid rgb(255, 255, 153);
         padding: 10px;
-        margin: 0 0 1em 0;
-        /* Add flexbox for centering content inside cards */
+        margin: 0 0 1em 0; /* Space between cards */
         display: flex;
         flex-direction: column;
-        align-items: center;
-        text-align: center;
-        /* Center text within the card */
+        align-items: center; /* Centers content horizontally within the card */
+        text-align: center; /* Centers inline text within the card */
+        border-radius: 6px; /* From #card in demo-Styles.css */
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25); /* From #card in demo-Styles.css */
+        overflow: hidden; /* From #card in demo-Styles.css */
     }
 
-    .card1 {
+    .card1 { /* Specific for card1 if used */
         break-inside: avoid;
         background-color: #ffff99;
         border: 2px solid rgb(255, 255, 153);
@@ -162,16 +156,15 @@
 
     .marginauto {
         display: block;
-        margin: 10px auto;
-        /* Ensure images with this class are centered */
+        margin: 10px auto; /* Centers block elements with this class */
     }
 
-    .centerImage {
+    .centerImage { /* Redundant with .card's flex centering, but harmless */
         text-align: center;
         display: block;
     }
 
-    .center {
+    .center { /* Likely redundant with .card's flex centering */
         display: block;
         margin-left: auto;
         margin-right: auto;
@@ -182,24 +175,20 @@
         color: #59cbe8;
     }
 
-    /* Custom button styles for consistency */
+    /* Custom button container for AR and print buttons */
     .button-container {
         margin-top: 30px;
-        /* Space between AR button and this new button */
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        /* Allows buttons to wrap on smaller screens */
         gap: 10px;
-        /* Space between buttons */
     }
 
+    /* Main button styling (for AR and print) */
     .main-button {
         background-color: #ffffff;
-        /* White background */
         border-radius: 8px;
         border: 2px solid #59cbe8;
-        /* Blue border */
         height: 60px;
         min-width: 250px;
         display: flex;
@@ -212,21 +201,17 @@
 
     .main-button:hover {
         background-color: #f0f8ff;
-        /* Light blue on hover */
         border-color: #48b0cc;
-        /* Darker blue border on hover */
     }
 
     .main-button-text {
         font-size: 32px;
         color: #000099;
-        /* Deep blue text */
         font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
         white-space: nowrap;
-        /* Prevent text from wrapping */
     }
 
-    /* --- Styles for Hyperlink Spacing --- */
+    /* Specific spacing for hyperlinks within cards */
     .card h2 p {
         margin-top: 5px; /* Reduce top margin for paragraphs within h2 */
         margin-bottom: 5px; /* Reduce bottom margin for paragraphs within h2 */
@@ -235,71 +220,82 @@
         margin-top: 5px; /* Reduce default top margin of h2 */
         margin-bottom: 5px; /* Reduce default bottom margin of h2 */
     }
-    /* You might need to adjust these pixel values (e.g., 5px) to get the exact spacing you desire */
+    /* Adjust these pixel values (e.g., 5px) for desired spacing */
 
-</style>
-<style>
+
+    /* model-viewer specific styling */
     model-viewer {
         --progress-bar-color: #59cbe8;
-        /* Change 'red' to your desired color */
+        /* Custom progress bar color */
+        /* The inline styles on model-viewer element will take precedence for width/height */
     }
-</style>
 
-<style>
+    /* Default <model-viewer> AR button hidden */
+    model-viewer::part(ar-button) {
+        display: none !important;
+    }
+
+    /* Video styling */
+    video {
+        /* Inline styles on the video element will take precedence */
+        /* Your inline style on the video is:
+           style="width: 375px; max-width: 100%; height: 375px; object-fit: cover; margin: auto; display: block;"
+           If you want `object-fit: contain;` from demo-Styles.css, you must remove `object-fit: cover;` from the inline style.
+           I'm leaving it as `cover` for now to match your HTML's current inline style.
+        */
+        object-fit: cover; /* Keeps aspect ratio and fills container, may crop */
+    }
+
+    /* Font face definitions (must be in a style block) */
     @font-face {
         font-family: 'Chalet LondonNineteenEighty Regular';
         src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype');
-        /* lowercase 'opentype' for consistency */
     }
 
     @font-face {
         font-family: 'DaisyByhapppyal-Regular';
         src: url('fonts/DaisyByhapppyal-Regular.otf') format('opentype');
-        /* lowercase 'opentype' for consistency */
     }
 
-    .custom-text {
+    .custom-text { /* For a specific custom text element, if used */
         font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
         color: #FFFFFF;
-        /* White text for contrast */
         position: absolute;
         top: 20px;
         left: 20px;
         font-size: 48px;
-        /* Adjust size as needed */
     }
 
-    .daisy-text {
+    .daisy-text { /* For a specific daisy text element, if used */
         font-family: 'DaisyByhapppyal-Regular', sans-serif;
         color: #000099;
-        /* Gold text for contrast */
-        font-size: 60 px;
-        /* Adjust size as needed */
+        font-size: 60px; /* Fixed "60 px" to "60px" */
     }
-</style>
 
-<style>
-    /* This media query was already present for font size and model size,
-       but the previous @media (max-width: auto) was not a valid CSS media query.
-       It should be a specific pixel value. I've corrected it to 768px for consistency
-       with the new .container media query. */
+    /* Media queries for responsiveness */
     @media (max-width: 768px) {
+        .container {
+            padding: 0 5px; /* Slightly less padding on mobile */
+        }
         .custom-text {
-            font-size: 18px;
-            /* Adjust font size for smaller screens */
+            font-size: 18px; /* Smaller font on mobile */
             top: 10px;
-            /* Adjust positioning */
             left: 10px;
         }
-
         model-viewer {
-            height: 300px;
-            /* Adjust model size for mobile */
+            height: 300px; /* Adjust model size for mobile */
+        }
+        /* Adjust AR button for mobile, using its actual class: main-button */
+        .main-button {
+            width: 90%; /* Make button wider for touch accessibility */
+            font-size: 24px; /* Increase readability */
+            margin-top: 10px;
         }
     }
+
 </style>
 
-<body bgcolor="#ffff99" style="display: flex; flex-direction: column; align-items: center; margin: 0; overflow-x: hidden;">
+<body bgcolor="#ffff99" style="display: flex; flex-direction: column; align-items: center;">
 
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-0000000" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="container">
