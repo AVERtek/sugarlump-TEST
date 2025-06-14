@@ -188,7 +188,7 @@
         border-radius: 8px;
         border: 2px solid #59cbe8;
         height: 60px; /* Fixed height for consistent button size */
-        min-width: 250px;
+        min-width: 250px; /* Minimum width for the button */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -279,9 +279,12 @@
 
         /* Adjust AR button for mobile, using its actual class: main-button */
         .main-button {
-            width: 90%; /* Make button wider for touch accessibility */
+            /* Changed width from 90% to a max-width and then min-width 
+               This ensures they don't get too big, but also don't break below a certain size. */
+            width: 100%; /* Take up full available width within parent */
+            max-width: 300px; /* Example: limit button width to 300px on mobile */
+            height: 50px; /* Slightly reduced button height on mobile */
             /* Removed font-size here as we'll size the span directly */
-            height: 50px; /* Slightly reduce button height on mobile */
         }
 
         /* NEW: Scaling for image and text inside main-button on mobile */
@@ -302,7 +305,6 @@
     }
 
 </style>
-
 <body bgcolor="#ffff99" style="display: flex; flex-direction: column; align-items: center;">
 
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-0000000" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
