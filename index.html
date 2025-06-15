@@ -1,3 +1,11 @@
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script> ```
+
+#### 2. Modify Your JavaScript
+
+Now, let's update the JavaScript section. The changes will be primarily within the `DOMContentLoaded` event listener.
+
+```html
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
 
@@ -29,6 +37,9 @@
 <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
 
 <script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
+
 
 <script>
     function Sync(selector, audioSelector) {
