@@ -1,11 +1,3 @@
-<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-<script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script> ```
-
-#### 2. Modify Your JavaScript
-
-Now, let's update the JavaScript section. The changes will be primarily within the `DOMContentLoaded` event listener.
-
-```html
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
 
@@ -27,295 +19,205 @@ Now, let's update the JavaScript section. The changes will be primarily within t
         gtag('config', '0-0000000000');
     </script>
 
-</head>
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
-
-<script nomodule="" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-<script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
-<script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-
-<script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
-
-<script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
-<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-<script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
-
-
-<script>
-    function Sync(selector, audioSelector) {
-        var modelViewer = document.querySelector(selector);
-        var sound = document.querySelector(audioSelector);
-        var playRequest = document.querySelector("#overlay");
-
-        sound.addEventListener("timeupdate", () => {
-            modelViewer.currentTime = sound.currentTime;
-            console.log("modelViewer time: " + modelViewer.currentTime);
-        });
-
-        sound.addEventListener("pause", () => {
-            modelViewer.pause();
-        });
-
-        sound.addEventListener("play", () => {
-            modelViewer.play();
-
-            playRequest.classList.add("hide");
-        });
-
-        document.addEventListener("visibilitychange", () => {
-            if (document.visibilityState !== "visible") {
-                sound.pause();
-            }
-        });
-        var promise = sound.play();
-        if (promise !== undefined) {
-            promise
-                .then(_ => {
-                    console.log("Autoplay has worked");
-                    playRequest.classList.add("hide");
-                })
-                .catch(error => {
-                    // Show a "Play" button so that user can start playback.
-                    console.log("Autoplay has not worked");
-
-                    // show the modal dialogue to play this
-                    playRequest.classList.remove("hide");
-                });
+    <style>
+        /* Global styles for html and body */
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevents horizontal scrolling */
+            font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif; /* Keep generic fonts for broader compatibility */
+            color: #244376; /* Default text color */
         }
 
-    }
-
-    function playNow() {
-        var playRequest = document.querySelector("#overlay");
-        playRequest.classList.add("hide");
-
-        var sound = document.querySelector("#sound");
-        sound.play();
-    }
-
-    function jumpTo(time) {
-        var sound = document.querySelector("#sound");
-        sound.currentTime = time;
-    }
-</script>
-
-<script>
-    /**
-     * Function that registers a click on an outbound link in Analytics.
-     * This function takes a valid URL string as an argument, and uses that URL string
-     * as the event label. Setting the transport method to 'beacon' lets the hit be sent
-     * using 'navigator.sendBeacon' in browser that support it.
-     */
-    var getOutboundLink = function(url) {
-        gtag('event', 'click', {
-            'event_category': 'outbound',
-            'event_label': url,
-            'transport_type': 'beacon',
-            'event_callback': function() {
-                document.location = url;
-            }
-        });
-    }
-</script>
-
-<style>
-    /* Global styles for html and body */
-    html, body {
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden; /* Prevents horizontal scrolling */
-        font-family: Google Sans, Noto, Roboto, Helvetica Neue, sans-serif; /* Keep generic fonts for broader compatibility */
-        color: #244376; /* Default text color */
-    }
-
-    /* Main container styling */
-    .container {
-        max-width: 600px; /* Max width for larger screens */
-        width: 100%; /* Default 100% width, constrained by max-width */
-        box-sizing: border-box; /* Include padding in width calculation */
-        padding: 0 10px; /* Default side padding for all screens */
-    }
-
-    /* Card styling */
-    .card {
-        break-inside: avoid; /* For multi-column layouts, prevents breaking cards */
-        background-color: rgb(255, 255, 153);
-        border: 2px solid rgb(255, 255, 153);
-        padding: 10px;
-        margin: 0 0 1em 0; /* Space between cards */
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Centers content horizontally within the card */
-        text-align: center; /* Centers inline text within the card */
-        border-radius: 6px; /* Keep border-radius if desired for rounded corners */
-        overflow: hidden; /* Keeps content within rounded corners */
-    }
-
-    .card1 { /* Specific for card1 if used */
-        break-inside: avoid;
-        background-color: #ffff99;
-        border: 2px solid rgb(255, 255, 153);
-        padding: 5px;
-        margin: 0 0 1em 0;
-    }
-
-    .stack-top {
-        z-index: 9;
-    }
-
-    .marginauto {
-        display: block;
-        margin: 10px auto; /* Centers block elements with this class */
-    }
-
-    .centerImage { /* Redundant with .card's flex centering, but harmless */
-        text-align: center;
-        display: block;
-    }
-
-    .center { /* Likely redundant with .card's flex centering */
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 50%;
-    }
-
-    a {
-        color: #59cbe8;
-    }
-
-    /* Custom button container for AR and print buttons */
-    .button-container {
-        margin-top: 30px;
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    /* Main button styling (for AR and print) */
-    .main-button {
-        background-color: #ffffff;
-        border-radius: 8px;
-        border: 2px solid #59cbe8;
-        height: 60px; /* Fixed height for consistent button size */
-        min-width: 250px; /* Minimum width for the button */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-
-    .main-button:hover {
-        background-color: #f0f8ff;
-        border-color: #48b0cc;
-    }
-
-    .main-button-text {
-        font-size: 32px;
-        color: #000099;
-        font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
-        white-space: nowrap; /* Prevent text from wrapping */
-    }
-
-    /* Specific spacing for hyperlinks within cards */
-    .card h2 p {
-        margin-top: 5px; /* Reduce top margin for paragraphs within h2 */
-        margin-bottom: 5px; /* Reduce bottom margin for paragraphs within h2 */
-    }
-    .card h2 {
-        margin-top: 5px; /* Reduce default top margin of h2 */
-        margin-bottom: 5px; /* Reduce default bottom margin of h2 */
-    }
-    /* Adjust these pixel values (e.g., 5px) for desired spacing */
-
-
-    /* model-viewer specific styling */
-    model-viewer {
-        --progress-bar-color: #59cbe8;
-        /* Custom progress bar color */
-    }
-
-    /* Default <model-viewer> AR button hidden */
-    model-viewer::part(ar-button) {
-        display: none !important;
-    }
-
-    /* Video styling */
-    video {
-        object-fit: cover; /* Keeps aspect ratio and fills container, may crop */
-    }
-
-    /* Font face definitions (must be in a style block) */
-    @font-face {
-        font-family: 'Chalet LondonNineteenEighty Regular';
-        src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype');
-    }
-
-    @font-face {
-        font-family: 'DaisyByhapppyal-Regular';
-        src: url('fonts/DaisyByhapppyal-Regular.otf') format('opentype');
-    }
-
-    .custom-text { /* For a specific custom text element, if used */
-        font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
-        color: #FFFFFF;
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        font-size: 48px;
-    }
-
-    .daisy-text { /* For a specific daisy text element, if used */
-        font-family: 'DaisyByhapppyal-Regular', sans-serif;
-        color: #000099;
-        font-size: 60px;
-    }
-
-    /* Media queries for responsiveness */
-    @media (max-width: 768px) {
+        /* Main container styling */
         .container {
-            padding: 0 5px; /* Slightly less padding on mobile */
-        }
-        .custom-text {
-            font-size: 18px; /* Smaller font on mobile */
-            top: 10px;
-            left: 10px;
-        }
-        model-viewer {
-            height: 300px; /* Adjust model size for mobile */
+            max-width: 600px; /* Max width for larger screens */
+            width: 100%; /* Default 100% width, constrained by max-width */
+            box-sizing: border-box; /* Include padding in width calculation */
+            padding: 0 10px; /* Default side padding for all screens */
         }
 
-        /* Adjust AR button for mobile, using its actual class: main-button */
+        /* Card styling */
+        .card {
+            break-inside: avoid; /* For multi-column layouts, prevents breaking cards */
+            background-color: rgb(255, 255, 153);
+            border: 2px solid rgb(255, 255, 153);
+            padding: 10px;
+            margin: 0 0 1em 0; /* Space between cards */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers content horizontally within the card */
+            text-align: center; /* Centers inline text within the card */
+            border-radius: 6px; /* Keep border-radius if desired for rounded corners */
+            overflow: hidden; /* Keeps content within rounded corners */
+        }
+
+        .card1 { /* Specific for card1 if used */
+            break-inside: avoid;
+            background-color: #ffff99;
+            border: 2px solid rgb(255, 255, 153);
+            padding: 5px;
+            margin: 0 0 1em 0;
+        }
+
+        .stack-top {
+            z-index: 9;
+        }
+
+        .marginauto {
+            display: block;
+            margin: 10px auto; /* Centers block elements with this class */
+        }
+
+        .centerImage { /* Redundant with .card's flex centering, but harmless */
+            text-align: center;
+            display: block;
+        }
+
+        .center { /* Likely redundant with .card's flex centering */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+
+        a {
+            color: #59cbe8;
+        }
+
+        /* Custom button container for AR and print buttons */
+        .button-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Main button styling (for AR and print) */
         .main-button {
-            /* Changed width from 90% to a max-width and then min-width 
-               This ensures they don't get too big, but also don't break below a certain size. */
-            width: 100%; /* Take up full available width within parent */
-            max-width: 250px; /* Example: limit button width to 250px on mobile */
-            height: 50px; /* Slightly reduced button height on mobile */
-            /* Removed font-size here as we'll size the span directly */
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 2px solid #59cbe8;
+            height: 60px; /* Fixed height for consistent button size */
+            min-width: 250px; /* Minimum width for the button */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
-        /* NEW: Scaling for image and text inside main-button on mobile */
-        .main-button img {
-            height: 3em !important; /* Scale image relative to font size, or a fixed smaller px value */
-            width: auto;
-            margin-right: 3px; /* Slightly reduce margin */
+        .main-button:hover {
+            background-color: #f0f8ff;
+            border-color: #48b0cc;
         }
 
-        .main-button span {
-            font-size: 24px !important; /* Scale text down for mobile */
+        .main-button-text {
+            font-size: 32px;
+            color: #000099;
+            font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
+            white-space: nowrap; /* Prevent text from wrapping */
         }
 
-        /* Specific override for the "print certificate" button's span to make text fit better */
-        #viewPrintCertificateButton span {
-            font-size: 18px !important; /* Even smaller for this specific button if needed */
+        /* Specific spacing for hyperlinks within cards */
+        .card h2 p {
+            margin-top: 5px; /* Reduce top margin for paragraphs within h2 */
+            margin-bottom: 5px; /* Reduce bottom margin for paragraphs within h2 */
         }
-    }
+        .card h2 {
+            margin-top: 5px; /* Reduce default top margin of h2 */
+            margin-bottom: 5px; /* Reduce default bottom margin of h2 */
+        }
+        /* Adjust these pixel values (e.g., 5px) for desired spacing */
 
-</style>
+
+        /* model-viewer specific styling */
+        model-viewer {
+            --progress-bar-color: #59cbe8;
+            /* Custom progress bar color */
+        }
+
+        /* Default <model-viewer> AR button hidden */
+        model-viewer::part(ar-button) {
+            display: none !important;
+        }
+
+        /* Video styling */
+        video {
+            object-fit: cover; /* Keeps aspect ratio and fills container, may crop */
+        }
+
+        /* Font face definitions (must be in a style block) */
+        @font-face {
+            font-family: 'Chalet LondonNineteenEighty Regular';
+            src: url('fonts/Chalet LondonNineteenEighty Regular.otf') format('opentype');
+        }
+
+        @font-face {
+            font-family: 'DaisyByhapppyal-Regular';
+            src: url('fonts/DaisyByhapppyal-Regular.otf') format('opentype');
+        }
+
+        .custom-text { /* For a specific custom text element, if used */
+            font-family: 'Chalet LondonNineteenEighty Regular', sans-serif;
+            color: #FFFFFF;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 48px;
+        }
+
+        .daisy-text { /* For a specific daisy text element, if used */
+            font-family: 'DaisyByhapppyal-Regular', sans-serif;
+            color: #000099;
+            font-size: 60px;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 5px; /* Slightly less padding on mobile */
+            }
+            .custom-text {
+                font-size: 18px; /* Smaller font on mobile */
+                top: 10px;
+                left: 10px;
+            }
+            model-viewer {
+                height: 300px; /* Adjust model size for mobile */
+            }
+
+            /* Adjust AR button for mobile, using its actual class: main-button */
+            .main-button {
+                /* Changed width from 90% to a max-width and then min-width 
+                   This ensures they don't get too big, but also don't break below a certain size. */
+                width: 100%; /* Take up full available width within parent */
+                max-width: 250px; /* Example: limit button width to 250px on mobile */
+                height: 50px; /* Slightly reduced button height on mobile */
+                /* Removed font-size here as we'll size the span directly */
+            }
+
+            /* NEW: Scaling for image and text inside main-button on mobile */
+            .main-button img {
+                height: 3em !important; /* Scale image relative to font size, or a fixed smaller px value */
+                width: auto;
+                margin-right: 3px; /* Slightly reduce margin */
+            }
+
+            .main-button span {
+                font-size: 24px !important; /* Scale text down for mobile */
+            }
+
+            /* Specific override for the "print certificate" button's span to make text fit better */
+            #viewPrintCertificateButton span {
+                font-size: 18px !important; /* Even smaller for this specific button if needed */
+            }
+        }
+
+    </style>
+</head>
 <body bgcolor="#ffff99" style="display: flex; flex-direction: column; align-items: center;">
 
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-0000000" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -359,145 +261,6 @@ Now, let's update the JavaScript section. The changes will be primarily within t
                 </span>
             </button>
         </div>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const video = document.getElementById('video-overlay');
-                const playPauseButton = document.getElementById('play-pause-button');
-                const arButton = document.getElementById('ar-button');
-                const modelViewer = document.getElementById('reveal');
-                const viewPrintCertificateButton = document.getElementById('viewPrintCertificateButton'); // Get the new button
-
-                // Initially, the video element (with its poster) is visible.
-                // The play button should also be visible by default.
-                playPauseButton.style.display = 'block';
-                playPauseButton.innerHTML = "▶";
-                video.muted = true; // Start muted, and let user click to unmute/play
-
-                // Function to toggle video play/pause
-                function toggleVideo() {
-                    if (video.paused || video.ended) {
-                        video.play();
-                        video.muted = false; // Enable audio playback after user interaction
-                        playPauseButton.innerHTML = "❚❚"; // Change to pause icon
-                        playPauseButton.style.display = "none"; // Hide button once playing
-                        modelViewer.pause(); // Pause model-viewer animation when video plays
-
-                        // --- START FULLSCREEN MODIFICATION ---
-                        if (video.requestFullscreen) {
-                            video.requestFullscreen();
-                        } else if (video.mozRequestFullScreen) {
-                            /* Firefox */
-                            video.mozRequestFullScreen();
-                        } else if (video.webkitRequestFullscreen) {
-                            /* Chrome, Safari and Opera */
-                            video.webkitRequestFullscreen();
-                        } else if (video.msRequestFullscreen) {
-                            /* IE/Edge */
-                            video.msRequestFullscreen();
-                        }
-                        // --- END FULLSCREEN MODIFICATION ---
-
-                    } else {
-                        video.pause();
-                        playPauseButton.innerHTML = "▶"; // Change to play icon
-                        playPauseButton.style.display = "block"; // Show button when paused
-                        modelViewer.play(); // Play model-viewer animation when video pauses
-
-                        // --- OPTIONAL: Exit fullscreen when paused if you want this behavior ---
-                        if (document.exitFullscreen) {
-                            document.exitFullscreen();
-                        } else if (document.mozCancelFullScreen) {
-                            /* Firefox */
-                            document.mozCancelFullScreen();
-                        } else if (document.webkitExitFullscreen) {
-                            /* Chrome, Safari and Opera */
-                            document.webkitExitFullscreen();
-                        } else if (document.msExitFullscreen) {
-                            /* IE/Edge */
-                            document.msExitFullscreen();
-                        }
-                        // --- END OPTIONAL MODIFICATION ---
-                    }
-                }
-
-                // Ensure clicking the video itself also toggles play/pause
-                video.addEventListener('click', toggleVideo);
-                playPauseButton.addEventListener('click', toggleVideo);
-
-                // Hide play button when video starts playing (e.g., after user click or successful autoplay)
-                video.addEventListener('play', () => {
-                    playPauseButton.style.display = "none";
-                });
-
-                // Show play button when video pauses
-                video.addEventListener('pause', () => {
-                    playPauseButton.style.display = "block";
-                });
-
-                // Function to launch AR experience
-                function launchAR() {
-                    // Pause video when entering AR
-                    if (!video.paused) {
-                        video.pause();
-                    }
-
-                    // Hide video and play button immediately when AR is triggered
-                    video.style.display = 'none';
-                    playPauseButton.style.display = 'none';
-
-                    // Also exit fullscreen if currently in it before launching AR
-                    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                        if (document.exitFullscreen) {
-                            document.exitFullscreen();
-                        } else if (document.mozCancelFullScreen) {
-                            document.mozCancelFullScreen();
-                        } else if (document.webkitExitFullscreen) {
-                            document.webkitExitFullscreen();
-                        } else if (document.msExitFullscreen) {
-                            document.msExitFullscreen();
-                        }
-                    }
-
-                    if (modelViewer.canActivateAR) {
-                        modelViewer.activateAR();
-                    } else {
-                        alert("AR is not available on this device.");
-                        // If AR is not available, but the AR button was clicked,
-                        // re-show the video and play button (video will be paused).
-                        video.style.display = 'block';
-                        if (video.paused) {
-                            playPauseButton.style.display = 'block';
-                        }
-                    }
-                }
-
-                // Attach AR button listener
-                arButton.addEventListener('click', launchAR);
-
-                // IMPORTANT: Add listener for when model-viewer enters/exits AR
-                modelViewer.addEventListener('ar-status', (event) => {
-                    if (event.detail.status === 'not-presenting') {
-                        // User exited AR. Re-display video and button.
-                        video.style.display = 'block';
-                        if (video.paused) {
-                            playPauseButton.style.display = 'block';
-                        }
-                    } else if (event.detail.status === 'ar' || event.detail.status === 'scene-viewer') {
-                        // User entered AR. Hide video and play button.
-                        video.style.display = 'none';
-                        playPauseButton.style.display = 'none';
-                    }
-                });
-
-                // NEW: Event listener for the "View/Print Certificate" button
-                viewPrintCertificateButton.addEventListener('click', function() {
-                    const pdfPath = 'certificates/SL CERTIFICATE.pdf'; // Make sure this path is correct!
-                    window.open(pdfPath, '_blank'); // Opens the PDF in a new tab
-                });
-
-            });
-        </script>
 
         <div class="card">
             <h1>
@@ -551,6 +314,295 @@ Now, let's update the JavaScript section. The changes will be primarily within t
                 </a></h4>
         </div>
     </div>
-</body>
+
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+    <script nomodule="" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
+    <script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
+
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.min.js"></script>
+
+    <script>
+        // Your existing Sync, playNow, jumpTo, getOutboundLink functions
+        function Sync(selector, audioSelector) {
+            var modelViewer = document.querySelector(selector);
+            var sound = document.querySelector(audioSelector);
+            var playRequest = document.querySelector("#overlay");
+
+            sound.addEventListener("timeupdate", () => {
+                modelViewer.currentTime = sound.currentTime;
+                console.log("modelViewer time: " + modelViewer.currentTime);
+            });
+
+            sound.addEventListener("pause", () => {
+                modelViewer.pause();
+            });
+
+            sound.addEventListener("play", () => {
+                modelViewer.play();
+
+                playRequest.classList.add("hide");
+            });
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState !== "visible") {
+                    sound.pause();
+                }
+            });
+            var promise = sound.play();
+            if (promise !== undefined) {
+                promise
+                    .then(_ => {
+                        console.log("Autoplay has worked");
+                        playRequest.classList.add("hide");
+                    })
+                    .catch(error => {
+                        // Show a "Play" button so that user can start playback.
+                        console.log("Autoplay has not worked");
+
+                        // show the modal dialogue to play this
+                        playRequest.classList.remove("hide");
+                    });
+            }
+
+        }
+
+        function playNow() {
+            var playRequest = document.querySelector("#overlay");
+            playRequest.classList.add("hide");
+
+            var sound = document.querySelector("#sound");
+            sound.play();
+        }
+
+        function jumpTo(time) {
+            var sound = document.querySelector("#sound");
+            sound.currentTime = time;
+        }
+
+        var getOutboundLink = function(url) {
+            gtag('event', 'click', {
+                'event_category': 'outbound',
+                'event_label': url,
+                'transport_type': 'beacon',
+                'event_callback': function() {
+                    document.location = url;
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const video = document.getElementById('video-overlay');
+            const playPauseButton = document.getElementById('play-pause-button');
+            const arButton = document.getElementById('ar-button');
+            const modelViewer = document.getElementById('reveal');
+            const viewPrintCertificateButton = document.getElementById('viewPrintCertificateButton');
+
+            playPauseButton.style.display = 'block';
+            playPauseButton.innerHTML = "▶";
+            video.muted = true;
+
+            function toggleVideo() {
+                if (video.paused || video.ended) {
+                    video.play();
+                    video.muted = false;
+                    playPauseButton.innerHTML = "❚❚";
+                    playPauseButton.style.display = "none";
+                    modelViewer.pause();
+
+                    if (video.requestFullscreen) {
+                        video.requestFullscreen();
+                    } else if (video.mozRequestFullScreen) {
+                        video.mozRequestFullScreen();
+                    } else if (video.webkitRequestFullscreen) {
+                        video.webkitRequestFullscreen();
+                    } else if (video.msRequestFullscreen) {
+                        video.msRequestFullscreen();
+                    }
+                } else {
+                    video.pause();
+                    playPauseButton.innerHTML = "▶";
+                    playPauseButton.style.display = "block";
+                    modelViewer.play();
+
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                }
+            }
+
+            video.addEventListener('click', toggleVideo);
+            playPauseButton.addEventListener('click', toggleVideo);
+
+            video.addEventListener('play', () => {
+                playPauseButton.style.display = "none";
+            });
+
+            video.addEventListener('pause', () => {
+                playPauseButton.style.display = "block";
+            });
+
+            function launchAR() {
+                if (!video.paused) {
+                    video.pause();
+                }
+
+                video.style.display = 'none';
+                playPauseButton.style.display = 'none';
+
+                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                }
+
+                if (modelViewer.canActivateAR) {
+                    modelViewer.activateAR();
+                } else {
+                    alert("AR is not available on this device.");
+                    video.style.display = 'block';
+                    if (video.paused) {
+                        playPauseButton.style.display = 'block';
+                    }
+                }
+            }
+
+            arButton.addEventListener('click', launchAR);
+
+            modelViewer.addEventListener('ar-status', (event) => {
+                if (event.detail.status === 'not-presenting') {
+                    video.style.display = 'block';
+                    if (video.paused) {
+                        playPauseButton.style.display = 'block';
+                    }
+                } else if (event.detail.status === 'ar' || event.detail.status === 'scene-viewer') {
+                    video.style.display = 'none';
+                    playPauseButton.style.display = 'none';
+                }
+            });
+
+            // --- START PDF-LIB INTEGRATION (Corrected) ---
+            async function generateStampedCertificate() {
+                // Ensure PDFLib is available globally after the script loads
+                const { PDFDocument, rgb, StandardFonts } = PDFLib;
+
+                // 1. Load your existing PDF certificate
+                const pdfPath = 'certificates/SL CERTIFICATE.pdf'; // Ensure this path is correct relative to your HTML!
+                try {
+                    const existingPdfBytes = await fetch(pdfPath).then(res => {
+                        if (!res.ok) {
+                            throw new Error(`HTTP error! status: ${res.status} - Could not fetch PDF from ${pdfPath}`);
+                        }
+                        return res.arrayBuffer();
+                    });
+                    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+                    // 2. Get the current date and calculate future date
+                    const today = new Date();
+                    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+                    const currentDateString = today.toLocaleDateString('en-US', dateOptions);
+
+                    const futureDate = new Date(today);
+                    futureDate.setDate(today.getDate() + 30); // Add 30 days
+                    const futureDateString = futureDate.toLocaleDateString('en-US', dateOptions);
+                    
+                    const noteTextLine1 = `Download Date: ${currentDateString}`;
+                    const noteTextLine2 = `Valid until: ${futureDateString}`;
+
+                    // 3. Get the first page of the PDF
+                    const pages = pdfDoc.getPages();
+                    if (pages.length === 0) {
+                        throw new Error("The PDF document contains no pages.");
+                    }
+                    const firstPage = pages[0]; 
+
+                    // Get page dimensions to help with positioning
+                    const { width, height } = firstPage.getSize();
+                    console.log(`PDF Page Dimensions: Width = ${width}, Height = ${height}`); // Log dimensions for debugging
+
+                    // Load a standard font. Helvetica is a safe bet for embedding.
+                    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+                    const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+
+                    // --- ADJUST THESE COORDINATES AND FONT SIZES ---
+                    // Remember: (0,0) is bottom-left.
+                    // x: distance from the left edge of the page
+                    // y: distance from the bottom edge of the page
+                    // If you want text 100px from the TOP, calculate as: height - 100 - (font size)
+                    // For example, if font size is 14, and you want 100px from top, y = height - 100 - 14
+
+                    // Example Placeholder Coordinates (You MUST adjust these for your specific PDF layout)
+                    const downloadDateX = 50; // Example: 50px from left edge
+                    const downloadDateY = height - 100; // Example: 100px from top edge
+                    const downloadDateFontSize = 14;
+
+                    const validUntilX = 50; // Align with download date
+                    const validUntilY = height - 120; // 20px below download date line
+                    const validUntilFontSize = 16;
+
+
+                    firstPage.drawText(noteTextLine1, {
+                        x: downloadDateX, 
+                        y: downloadDateY, 
+                        font: helveticaFont,
+                        size: downloadDateFontSize,
+                        color: rgb(0.2, 0.2, 0.2), // Dark grey
+                    });
+                    console.log(`Drawing Download Date at X: ${downloadDateX}, Y: ${downloadDateY}, Size: ${downloadDateFontSize}`);
+
+
+                    firstPage.drawText(noteTextLine2, {
+                        x: validUntilX, 
+                        y: validUntilY, 
+                        font: helveticaBoldFont,
+                        size: validUntilFontSize,
+                        color: rgb(0.8, 0.2, 0.2), // A reddish color for emphasis
+                    });
+                    console.log(`Drawing Valid Until Date at X: ${validUntilX}, Y: ${validUntilY}, Size: ${validUntilFontSize}`);
+
+                    // --- END ADJUSTMENT SECTION ---
+
+
+                    // 4. Serialize the PDF to bytes
+                    const pdfBytes = await pdfDoc.save();
+
+                    // 5. Create a Blob and URL to open in a new tab
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+
+                    window.open(url, '_blank');
+
+                    // Clean up the object URL after a short delay (optional, but good practice)
+                    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+                } catch (error) {
+                    console.error("Error generating stamped certificate:", error);
+                    alert("Failed to generate certificate. Please check the console for details.");
+                }
+            }
+
+            // Modify the "View/Print Certificate" button listener to call our new function
+            viewPrintCertificateButton.addEventListener('click', generateStampedCertificate);
+            // --- END PDF-LIB INTEGRATION ---
+
+        });
+    </script>
+    </body>
 
 </html>
