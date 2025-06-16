@@ -524,6 +524,10 @@
                     const noteTextLine1 = `Download Date: ${currentDateString}`;
                     const noteTextLine2 = `Valid until: ${futureDateString}`;
 
+                    // *** NEW LINE TO ADD ***
+                    const newTopLineText = "Sweet Neighbor of Mine";
+                    // ***********************
+
                     // 3. Get the first page of the PDF
                     const pages = pdfDoc.getPages();
                     if (pages.length === 0) {
@@ -547,14 +551,34 @@
                     // If you want text 100px from the TOP, calculate as: height - 100 - (font size)
                     // For example, if font size is 14, and you want 100px from top, y = height - 100 - 14
 
-                    // Example Placeholder Coordinates (You MUST adjust these for your specific PDF layout)
-                    const downloadDateX = 85; // Example: 85px from left edge
-                    const downloadDateY = height - 190; // Example: 190px from top edge
+                    // Initial coordinates you provided
+                    let downloadDateX = 85; 
+                    let downloadDateY = height - 190; 
                     const downloadDateFontSize = 14;
 
-                    const validUntilX = 85; // Align with download date
-                    const validUntilY = height - 210; // 20px below download date line
+                    let validUntilX = 85; 
+                    let validUntilY = height - 210; 
                     const validUntilFontSize = 16;
+
+                    // --- NEW LINE COORDINATES (Adjusted for "Official Certificate of Kindness") ---
+                    const newTopLineFontSize = 20; 
+                    const newTopLineX = downloadDateX; // Align with the other lines
+                    // Calculate Y: (This moves it 20px above the download date line, assuming a 20px font for the new line)
+                    const newTopLineY = downloadDateY + newTopLineFontSize + 5; 
+                    // To move this line further up, increase `+ 5` or simply increase the `newTopLineY` value.
+                    // To move this line down, decrease `+ 5` or simply decrease the `newTopLineY` value.
+                    // --- END NEW LINE COORDINATES ---
+
+                    // *** DRAW THE NEW LINE FIRST (so it appears above) ***
+                    firstPage.drawText(newTopLineText, {
+                        x: newTopLineX, 
+                        y: newTopLineY, 
+                        font: helveticaBoldFont, // Using bold font for emphasis
+                        size: newTopLineFontSize,
+                        color: rgb(0.1, 0.1, 0.5), // A darker blue color
+                    });
+                    console.log(`Drawing New Top Line at X: ${newTopLineX}, Y: ${newTopLineY}, Size: ${newTopLineFontSize}`);
+                    // ******************************************************
 
 
                     firstPage.drawText(noteTextLine1, {
@@ -603,6 +627,6 @@
 
         });
     </script>
-    </body>
+</body>
 
 </html>
