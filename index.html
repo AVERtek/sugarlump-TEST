@@ -496,7 +496,7 @@
                 }
             });
 
-            // --- START PDF-LIB INTEGRATION (Corrected) ---
+            // --- START PDF-LIB INTEGRATION (Corrected with new positioning) ---
             async function generateStampedCertificate() {
                 // Ensure PDFLib is available globally after the script loads
                 const { PDFDocument, rgb, StandardFonts } = PDFLib;
@@ -524,11 +524,9 @@
                     const noteTextLine1 = `Download Date: ${currentDateString}`;
                     const noteTextLine2 = `Valid until: ${futureDateString}`;
 
-                    // *** NEW LINE TO ADD ***
                     const newTopLineText = "Sweet Neighbor of Mine";
-                    // ***********************
 
-                    // *** NEW CODE STARTS HERE: Certificate Number Generation ***
+                    // *** Certificate Number Generation (UNCHANGED) ***
                     // Function to format a number with leading zero if it's a single digit
                     const padTwoDigits = (num) => String(num).padStart(2, '0');
 
@@ -548,7 +546,7 @@
                         `${padTwoDigits(minutes)}`;
 
                     const certificateText = `Certificate No. ${certificateNumber}`;
-                    // *** NEW CODE ENDS HERE ***
+                    // *** END Certificate Number Generation ***
 
 
                     // 3. Get the first page of the PDF
@@ -572,46 +570,61 @@
                     // x: distance from the left edge of the page
                     // y: distance from the bottom edge of the page
                     // If you want text 100px from the TOP, calculate as: height - 100 - (font size)
-                    // For example, if font size is 14, and you want 100px from top, y = height - 100 - 14
 
-                    // Initial coordinates you provided
-                    let downloadDateX = 80;
-                    let downloadDateY = height - 210;
-                    const downloadDateFontSize = 14;
+                    const baseLineY = height - 190; // A new higher starting Y position to move the block up
 
-                    let validUntilX = 80;
-                    let validUntilY = height - 230;
-                    const validUntilFontSize = 16;
-
-                    // --- NEW LINE COORDINATES (Adjusted for "Official Certificate of Kindness") ---
+                    // Title: "Sweet Neighbor of Mine"
                     const newTopLineFontSize = 16;
-                    const newTopLineX = downloadDateX; // Align with the other lines
-                    // Calculate Y: (This moves it 20px above the download date line, assuming a 20px font for the new line)
-                    const newTopLineY = downloadDateY + newTopLineFontSize + 5;
-                    // To move this line further up, increase `+ 5` or simply increase the `newTopLineY` value.
-                    // To move this line down, decrease `+ 5` or simply decrease the `newTopLineY` value.
-                    // --- END NEW LINE COORDINATES ---
+                    const newTopLineX = 80; // Consistent X position
+                    const newTopLineY = baseLineY; // Starting point for the block
+                    // console.log(`Drawing New Top Line at X: ${newTopLineX}, Y: ${newTopLineY}, Size: ${newTopLineFontSize}`);
 
-                    // *** NEW CODE STARTS HERE: Certificate Number positioning ***
-                    const certificateNoFontSize = 14; // You can adjust this
-                    const certificateNoX = 80; // Align with other text
-                    // Position it below the "Valid until" line, with some padding
-                    const certificateNoY = validUntilY - certificateNoFontSize - 5; // 5px padding below validUntil line
-                    // *** NEW CODE ENDS HERE ***
+                    // Certificate No.
+                    const certificateNoFontSize = 14;
+                    const certificateNoX = 80; // Consistent X position
+                    // Position 15px below the newTopLine, considering its font size
+                    const certificateNoY = newTopLineY - newTopLineFontSize - 10; // Adjusted for new spacing
+                    // console.log(`Drawing Certificate Number at X: ${certificateNoX}, Y: ${certificateNoY}, Size: ${certificateNoFontSize}`);
+
+                    // Download Date
+                    const downloadDateFontSize = 14;
+                    const downloadDateX = 80; // Consistent X position
+                    // Position 15px below the Certificate No., considering its font size
+                    const downloadDateY = certificateNoY - certificateNoFontSize - 10; // Adjusted for new spacing
+                    // console.log(`Drawing Download Date at X: ${downloadDateX}, Y: ${downloadDateY}, Size: ${downloadDateFontSize}`);
 
 
-                    // *** DRAW THE NEW LINE FIRST (so it appears above) ***
+                    // Valid Until Date
+                    const validUntilFontSize = 16;
+                    const validUntilX = 80; // Consistent X position
+                    // Position 15px below the Download Date, considering its font size
+                    const validUntilY = downloadDateY - downloadDateFontSize - 10; // Adjusted for new spacing
+                    // console.log(`Drawing Valid Until Date at X: ${validUntilX}, Y: ${validUntilY}, Size: ${validUntilFontSize}`);
+
+                    // --- END ADJUSTMENT SECTION ---
+
+
+                    // *** DRAWING ORDER (IMPORTANT FOR LAYERING) ***
+
+                    // 1. Draw "Sweet Neighbor of Mine"
                     firstPage.drawText(newTopLineText, {
                         x: newTopLineX,
                         y: newTopLineY,
-                        font: helveticaBoldFont, // Using bold font for emphasis
+                        font: helveticaBoldFont,
                         size: newTopLineFontSize,
                         color: rgb(1.0, 0.4, 0.7), // SL pink color (converted to 0-1 range)
                     });
-                    console.log(`Drawing New Top Line at X: ${newTopLineX}, Y: ${newTopLineY}, Size: ${newTopLineFontSize}`);
-                    // ******************************************************
 
+                    // 2. Draw "Certificate No."
+                    firstPage.drawText(certificateText, {
+                        x: certificateNoX,
+                        y: certificateNoY,
+                        font: helveticaFont,
+                        size: certificateNoFontSize,
+                        color: rgb(0.1, 0.1, 0.5), // Dark blue, or your preferred color
+                    });
 
+                    // 3. Draw "Download Date"
                     firstPage.drawText(noteTextLine1, {
                         x: downloadDateX,
                         y: downloadDateY,
@@ -619,9 +632,8 @@
                         size: downloadDateFontSize,
                         color: rgb(0.1, 0.1, 0.5), // Dark blue
                     });
-                    console.log(`Drawing Download Date at X: ${downloadDateX}, Y: ${downloadDateY}, Size: ${downloadDateFontSize}`);
 
-
+                    // 4. Draw "Valid until"
                     firstPage.drawText(noteTextLine2, {
                         x: validUntilX,
                         y: validUntilY,
@@ -629,20 +641,6 @@
                         size: validUntilFontSize,
                         color: rgb(0.8, 0.2, 0.2), // A reddish color for emphasis
                     });
-                    console.log(`Drawing Valid Until Date at X: ${validUntilX}, Y: ${validUntilY}, Size: ${validUntilFontSize}`);
-
-                    // *** NEW CODE STARTS HERE: Drawing the Certificate Number ***
-                    firstPage.drawText(certificateText, {
-                        x: certificateNoX,
-                        y: certificateNoY,
-                        font: helveticaFont, // Or helveticaBoldFont if you prefer
-                        size: certificateNoFontSize,
-                        color: rgb(0.1, 0.1, 0.5), // Dark Blue, or choose a specific color
-                    });
-                    console.log(`Drawing Certificate Number at X: ${certificateNoX}, Y: ${certificateNoY}, Size: ${certificateNoFontSize}`);
-                    // *** NEW CODE ENDS HERE ***
-
-                    // --- END ADJUSTMENT SECTION ---
 
 
                     // 4. Serialize the PDF to bytes
@@ -666,7 +664,6 @@
             // Modify the "View/Print Certificate" button listener to call our new function
             viewPrintCertificateButton.addEventListener('click', generateStampedCertificate);
             // --- END PDF-LIB INTEGRATION ---
-
         });
     </script>
 </body>
