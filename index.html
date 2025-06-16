@@ -484,17 +484,18 @@
 
             arButton.addEventListener('click', launchAR);
 
-            modelViewer.addEventListener('ar-status', (event) => {
-                if (event.detail.status === 'not-presenting') {
-                    video.style.display = 'block';
-                    if (video.paused) {
-                        playPauseButton.style.display = 'block';
-                    }
-                } else if (event.detail.status === 'ar' || event.detail.status === 'scene-viewer') {
-                    video.style.display = 'none';
-                    playPauseButton.style.display = 'none';
-                }
-            });
+
+            // --- Fallback function for traditional download (defined within DOMContentLoaded) ---
+            function fallbackDownload(blob, certificateNumber) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `SweetNeighborCertificate_${certificateNumber}.pdf`; // Suggested filename for fallback
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
 
             // --- START PDF-LIB INTEGRATION (Save As functionality implemented) ---
             async function generateStampedCertificate() {
@@ -545,3 +546,116 @@
                         throw new Error("The PDF document contains no pages.");
                     }
                     const firstPage = pages[0];
+
+                    const { width, height } = firstPage.getSize();
+                    console.log(`PDF Page Dimensions: Width = ${width}, Height = ${height}`);
+
+                    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+                    const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+                    const baseLineY = height - 170;
+
+                    const newTopLineFontSize = 18;
+                    const newTopLineX = 80;
+                    const newTopLineY = baseLineY;
+
+                    const certificateNoFontSize = 14;
+                    const certificateNoX = 80;
+                    const certificateNoY = newTopLineY - newTopLineFontSize - 5;
+
+                    const downloadDateFontSize = 14;
+                    const downloadDateX = 80;
+                    const downloadDateY = certificateNoY - certificateNoFontSize - 5;
+
+                    const validUntilFontSize = 16;
+                    const validUntilX = 80;
+                    const validUntilY = downloadDateY - downloadDateFontSize - 10;
+
+                    // 1. Draw "Sweet Neighbor of Mine"
+                    firstPage.drawText(newTopLineText, {
+                        x: newTopLineX,
+                        y: newTopLineY,
+                        font: helveticaBoldFont,
+                        size: newTopLineFontSize,
+                        color: rgb(1.0, 0.4, 0.7),
+                    });
+
+                    // 2. Draw "Certificate No."
+                    firstPage.drawText(certificateText, {
+                        x: certificateNoX,
+                        y: certificateNoY,
+                        font: helveticaFont,
+                        size: certificateNoFontSize,
+                        color: rgb(0.1, 0.1, 0.5),
+                    });
+
+                    // 3. Draw "Download Date"
+                    firstPage.drawText(noteTextLine1, {
+                        x: downloadDateX,
+                        y: downloadDateY,
+                        font: helveticaFont,
+                        size: downloadDateFontSize,
+                        color: rgb(0.1, 0.1, 0.5),
+                    });
+
+                    // 4. Draw "Valid until"
+                    firstPage.drawText(noteTextLine2, {
+                        x: validUntilX,
+                        y: validUntilY,
+                        font: helveticaBoldFont,
+                        size: validUntilFontSize,
+                        color: rgb(0.8, 0.2, 0.2),
+                    });
+
+                    const pdfBytes = await pdfDoc.save();
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+                    // --- NEW: Implement File System Access API with Fallback ---
+                    // Changed condition to directly check for API presence as `window.self === window.top`
+                    // can sometimes cause issues in certain development/hosting environments.
+                    if ('showSaveFilePicker' in window) {
+                        try {
+                            const suggestedName = `SweetNeighborCertificate_${certificateNumber}.pdf`;
+
+                            const fileHandle = await window.showSaveFilePicker({
+                                suggestedName: suggestedName,
+                                types: [{
+                                    description: 'PDF Documents',
+                                    accept: {
+                                        'application/pdf': ['.pdf'],
+                                    },
+                                }],
+                            });
+
+                            const writableStream = await fileHandle.createWritable();
+                            await writableStream.write(blob);
+                            await writableStream.close();
+
+                            console.log('PDF saved successfully using File System Access API.');
+
+                        } catch (error) {
+                            if (error.name === 'AbortError') {
+                                console.log('User cancelled the save operation.');
+                            } else {
+                                console.error('Error saving PDF using File System Access API:', error);
+                                fallbackDownload(blob, certificateNumber); // Fallback if API fails unexpectedly
+                            }
+                        }
+                    } else {
+                        console.warn('showSaveFilePicker not supported. Falling back to traditional download.');
+                        fallbackDownload(blob, certificateNumber);
+                    }
+
+                } catch (error) {
+                    console.error("Error generating stamped certificate:", error);
+                    alert("Failed to generate certificate. Please check the console for details.");
+                }
+            }
+
+            viewPrintCertificateButton.addEventListener('click', generateStampedCertificate);
+            // --- END PDF-LIB INTEGRATION ---
+        });
+    </script>
+</body>
+
+</html>
