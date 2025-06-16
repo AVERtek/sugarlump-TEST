@@ -310,7 +310,7 @@
 
         <div class="card">
             <h4><a href="https://avertek.net/" target="_blank" rel="noopener noreferrer">
-                    <p style="font-family:Chalet LondonNineteenEighty Regular; color:##59cbe8;"> Contact AVERtek to learn more about AR marketing.</p>
+                        <p style="font-family:Chalet LondonNineteenEighty Regular; color:##59cbe8;"> Contact AVERtek to learn more about AR marketing.</p>
                 </a></h4>
         </div>
     </div>
@@ -496,13 +496,11 @@
                 }
             });
 
-            // --- START PDF-LIB INTEGRATION (Corrected with new positioning) ---
+            // --- START PDF-LIB INTEGRATION (Save As functionality implemented) ---
             async function generateStampedCertificate() {
-                // Ensure PDFLib is available globally after the script loads
                 const { PDFDocument, rgb, StandardFonts } = PDFLib;
 
-                // 1. Load your existing PDF certificate
-                const pdfPath = 'certificates/SL CERTIFICATE 2.pdf'; // Ensure this path is correct relative to your HTML!
+                const pdfPath = 'certificates/SL CERTIFICATE 2.pdf';
                 try {
                     const existingPdfBytes = await fetch(pdfPath).then(res => {
                         if (!res.ok) {
@@ -512,13 +510,12 @@
                     });
                     const pdfDoc = await PDFDocument.load(existingPdfBytes);
 
-                    // 2. Get the current date and calculate future date
                     const today = new Date();
                     const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
                     const currentDateString = today.toLocaleDateString('en-US', dateOptions);
 
                     const futureDate = new Date(today);
-                    futureDate.setDate(today.getDate() + 30); // Add 30 days
+                    futureDate.setDate(today.getDate() + 30);
                     const futureDateString = futureDate.toLocaleDateString('en-US', dateOptions);
 
                     const noteTextLine1 = `Download Date: ${currentDateString}`;
@@ -526,18 +523,14 @@
 
                     const newTopLineText = "Sweet Neighbor of Mine";
 
-                    // *** Certificate Number Generation (UNCHANGED) ***
-                    // Function to format a number with leading zero if it's a single digit
                     const padTwoDigits = (num) => String(num).padStart(2, '0');
 
-                    // Get components for the certificate number
-                    const year = today.getFullYear() % 100; // Last two digits of the year
-                    const month = today.getMonth() + 1; // getMonth() is 0-indexed
+                    const year = today.getFullYear() % 100;
+                    const month = today.getMonth() + 1;
                     const day = today.getDate();
-                    const hours = today.getHours(); // 24-hour format
+                    const hours = today.getHours();
                     const minutes = today.getMinutes();
 
-                    // Construct the certificate number string
                     const certificateNumber =
                         `${padTwoDigits(year)}` +
                         `${padTwoDigits(month)}` +
@@ -546,126 +539,9 @@
                         `${padTwoDigits(minutes)}`;
 
                     const certificateText = `Certificate No: ${certificateNumber}`;
-                    // *** END Certificate Number Generation ***
 
-
-                    // 3. Get the first page of the PDF
                     const pages = pdfDoc.getPages();
                     if (pages.length === 0) {
                         throw new Error("The PDF document contains no pages.");
                     }
                     const firstPage = pages[0];
-
-                    // Get page dimensions to help with positioning
-                    const { width, height } = firstPage.getSize();
-                    console.log(`PDF Page Dimensions: Width = ${width}, Height = ${height}`); // Log dimensions for debugging
-
-                    // Load a standard font. Helvetica is a safe bet for embedding.
-                    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
-                    const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-
-
-                    // --- ADJUST THESE COORDINATES AND FONT SIZES ---
-                    // Remember: (0,0) is bottom-left.
-                    // x: distance from the left edge of the page
-                    // y: distance from the bottom edge of the page
-                    // If you want text 100px from the TOP, calculate as: height - 100 - (font size)
-
-                    const baseLineY = height - 170; // A new higher starting Y position to move the block up
-
-                    // Title: "Sweet Neighbor of Mine"
-                    const newTopLineFontSize = 18;
-                    const newTopLineX = 80; // Consistent X position
-                    const newTopLineY = baseLineY; // Starting point for the block
-                    // console.log(`Drawing New Top Line at X: ${newTopLineX}, Y: ${newTopLineY}, Size: ${newTopLineFontSize}`);
-
-                    // Certificate No.
-                    const certificateNoFontSize = 14;
-                    const certificateNoX = 80; // Consistent X position
-                    // Position 15px below the newTopLine, considering its font size
-                    const certificateNoY = newTopLineY - newTopLineFontSize - 5; // Adjusted for new spacing
-                    // console.log(`Drawing Certificate Number at X: ${certificateNoX}, Y: ${certificateNoY}, Size: ${certificateNoFontSize}`);
-
-                    // Download Date
-                    const downloadDateFontSize = 14;
-                    const downloadDateX = 80; // Consistent X position
-                    // Position 15px below the Certificate No., considering its font size
-                    const downloadDateY = certificateNoY - certificateNoFontSize - 5; // Adjusted for new spacing
-                    // console.log(`Drawing Download Date at X: ${downloadDateX}, Y: ${downloadDateY}, Size: ${downloadDateFontSize}`);
-
-
-                    // Valid Until Date
-                    const validUntilFontSize = 16;
-                    const validUntilX = 80; // Consistent X position
-                    // Position 15px below the Download Date, considering its font size
-                    const validUntilY = downloadDateY - downloadDateFontSize - 10; // Adjusted for new spacing
-                    // console.log(`Drawing Valid Until Date at X: ${validUntilX}, Y: ${validUntilY}, Size: ${validUntilFontSize}`);
-
-                    // --- END ADJUSTMENT SECTION ---
-
-
-                    // *** DRAWING ORDER (IMPORTANT FOR LAYERING) ***
-
-                    // 1. Draw "Sweet Neighbor of Mine"
-                    firstPage.drawText(newTopLineText, {
-                        x: newTopLineX,
-                        y: newTopLineY,
-                        font: helveticaBoldFont,
-                        size: newTopLineFontSize,
-                        color: rgb(1.0, 0.4, 0.7), // SL pink color (converted to 0-1 range)
-                    });
-
-                    // 2. Draw "Certificate No."
-                    firstPage.drawText(certificateText, {
-                        x: certificateNoX,
-                        y: certificateNoY,
-                        font: helveticaFont,
-                        size: certificateNoFontSize,
-                        color: rgb(0.1, 0.1, 0.5), // Dark blue, or your preferred color
-                    });
-
-                    // 3. Draw "Download Date"
-                    firstPage.drawText(noteTextLine1, {
-                        x: downloadDateX,
-                        y: downloadDateY,
-                        font: helveticaFont,
-                        size: downloadDateFontSize,
-                        color: rgb(0.1, 0.1, 0.5), // Dark blue
-                    });
-
-                    // 4. Draw "Valid until"
-                    firstPage.drawText(noteTextLine2, {
-                        x: validUntilX,
-                        y: validUntilY,
-                        font: helveticaBoldFont,
-                        size: validUntilFontSize,
-                        color: rgb(0.8, 0.2, 0.2), // A reddish color for emphasis
-                    });
-
-
-                    // 4. Serialize the PDF to bytes
-                    const pdfBytes = await pdfDoc.save();
-
-                    // 5. Create a Blob and URL to open in a new tab
-                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-
-                    window.open(url, '_blank');
-
-                    // Clean up the object URL after a short delay (optional, but good practice)
-                    setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-                } catch (error) {
-                    console.error("Error generating stamped certificate:", error);
-                    alert("Failed to generate certificate. Please check the console for details.");
-                }
-            }
-
-            // Modify the "View/Print Certificate" button listener to call our new function
-            viewPrintCertificateButton.addEventListener('click', generateStampedCertificate);
-            // --- END PDF-LIB INTEGRATION ---
-        });
-    </script>
-</body>
-
-</html>
