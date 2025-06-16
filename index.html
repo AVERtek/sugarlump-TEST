@@ -192,7 +192,7 @@
             /* Adjust AR button for mobile, using its actual class: main-button */
             .main-button {
                 /* Changed width from 90% to a max-width and then min-width 
-                   This ensures they don't get too big, but also don't break below a certain size. */
+                    This ensures they don't get too big, but also don't break below a certain size. */
                 width: 100%; /* Take up full available width within parent */
                 max-width: 250px; /* Example: limit button width to 250px on mobile */
                 height: 50px; /* Slightly reduced button height on mobile */
@@ -520,7 +520,7 @@
                     const futureDate = new Date(today);
                     futureDate.setDate(today.getDate() + 30); // Add 30 days
                     const futureDateString = futureDate.toLocaleDateString('en-US', dateOptions);
-                    
+
                     const noteTextLine1 = `Download Date: ${currentDateString}`;
                     const noteTextLine2 = `Valid until: ${futureDateString}`;
 
@@ -528,12 +528,35 @@
                     const newTopLineText = "Sweet Neighbor of Mine";
                     // ***********************
 
+                    // *** NEW CODE STARTS HERE: Certificate Number Generation ***
+                    // Function to format a number with leading zero if it's a single digit
+                    const padTwoDigits = (num) => String(num).padStart(2, '0');
+
+                    // Get components for the certificate number
+                    const year = today.getFullYear() % 100; // Last two digits of the year
+                    const month = today.getMonth() + 1; // getMonth() is 0-indexed
+                    const day = today.getDate();
+                    const hours = today.getHours(); // 24-hour format
+                    const minutes = today.getMinutes();
+
+                    // Construct the certificate number string
+                    const certificateNumber =
+                        `${padTwoDigits(year)}` +
+                        `${padTwoDigits(month)}` +
+                        `${padTwoDigits(day)}` +
+                        `${padTwoDigits(hours)}` +
+                        `${padTwoDigits(minutes)}`;
+
+                    const certificateText = `Certificate No. ${certificateNumber}`;
+                    // *** NEW CODE ENDS HERE ***
+
+
                     // 3. Get the first page of the PDF
                     const pages = pdfDoc.getPages();
                     if (pages.length === 0) {
                         throw new Error("The PDF document contains no pages.");
                     }
-                    const firstPage = pages[0]; 
+                    const firstPage = pages[0];
 
                     // Get page dimensions to help with positioning
                     const { width, height } = firstPage.getSize();
@@ -552,27 +575,35 @@
                     // For example, if font size is 14, and you want 100px from top, y = height - 100 - 14
 
                     // Initial coordinates you provided
-                    let downloadDateX = 80; 
-                    let downloadDateY = height - 210; 
+                    let downloadDateX = 80;
+                    let downloadDateY = height - 210;
                     const downloadDateFontSize = 14;
 
-                    let validUntilX = 80; 
-                    let validUntilY = height - 230; 
+                    let validUntilX = 80;
+                    let validUntilY = height - 230;
                     const validUntilFontSize = 16;
 
                     // --- NEW LINE COORDINATES (Adjusted for "Official Certificate of Kindness") ---
-                    const newTopLineFontSize = 16; 
+                    const newTopLineFontSize = 16;
                     const newTopLineX = downloadDateX; // Align with the other lines
                     // Calculate Y: (This moves it 20px above the download date line, assuming a 20px font for the new line)
-                    const newTopLineY = downloadDateY + newTopLineFontSize + 5; 
+                    const newTopLineY = downloadDateY + newTopLineFontSize + 5;
                     // To move this line further up, increase `+ 5` or simply increase the `newTopLineY` value.
                     // To move this line down, decrease `+ 5` or simply decrease the `newTopLineY` value.
                     // --- END NEW LINE COORDINATES ---
 
+                    // *** NEW CODE STARTS HERE: Certificate Number positioning ***
+                    const certificateNoFontSize = 14; // You can adjust this
+                    const certificateNoX = 80; // Align with other text
+                    // Position it below the "Valid until" line, with some padding
+                    const certificateNoY = validUntilY - certificateNoFontSize - 5; // 5px padding below validUntil line
+                    // *** NEW CODE ENDS HERE ***
+
+
                     // *** DRAW THE NEW LINE FIRST (so it appears above) ***
                     firstPage.drawText(newTopLineText, {
-                        x: newTopLineX, 
-                        y: newTopLineY, 
+                        x: newTopLineX,
+                        y: newTopLineY,
                         font: helveticaBoldFont, // Using bold font for emphasis
                         size: newTopLineFontSize,
                         color: rgb(1.0, 0.4, 0.7), // SL pink color (converted to 0-1 range)
@@ -582,8 +613,8 @@
 
 
                     firstPage.drawText(noteTextLine1, {
-                        x: downloadDateX, 
-                        y: downloadDateY, 
+                        x: downloadDateX,
+                        y: downloadDateY,
                         font: helveticaFont,
                         size: downloadDateFontSize,
                         color: rgb(0.1, 0.1, 0.5), // Dark blue
@@ -592,13 +623,24 @@
 
 
                     firstPage.drawText(noteTextLine2, {
-                        x: validUntilX, 
-                        y: validUntilY, 
+                        x: validUntilX,
+                        y: validUntilY,
                         font: helveticaBoldFont,
                         size: validUntilFontSize,
                         color: rgb(0.8, 0.2, 0.2), // A reddish color for emphasis
                     });
                     console.log(`Drawing Valid Until Date at X: ${validUntilX}, Y: ${validUntilY}, Size: ${validUntilFontSize}`);
+
+                    // *** NEW CODE STARTS HERE: Drawing the Certificate Number ***
+                    firstPage.drawText(certificateText, {
+                        x: certificateNoX,
+                        y: certificateNoY,
+                        font: helveticaFont, // Or helveticaBoldFont if you prefer
+                        size: certificateNoFontSize,
+                        color: rgb(0, 0, 0), // Black, or choose a specific color
+                    });
+                    console.log(`Drawing Certificate Number at X: ${certificateNoX}, Y: ${certificateNoY}, Size: ${certificateNoFontSize}`);
+                    // *** NEW CODE ENDS HERE ***
 
                     // --- END ADJUSTMENT SECTION ---
 
