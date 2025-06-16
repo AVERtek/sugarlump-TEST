@@ -552,16 +552,16 @@
                     // For example, if font size is 14, and you want 100px from top, y = height - 100 - 14
 
                     // Initial coordinates you provided
-                    let downloadDateX = 85; 
-                    let downloadDateY = height - 190; 
+                    let downloadDateX = 80; 
+                    let downloadDateY = height - 210; 
                     const downloadDateFontSize = 14;
 
-                    let validUntilX = 85; 
-                    let validUntilY = height - 210; 
+                    let validUntilX = 80; 
+                    let validUntilY = height - 230; 
                     const validUntilFontSize = 16;
 
                     // --- NEW LINE COORDINATES (Adjusted for "Official Certificate of Kindness") ---
-                    const newTopLineFontSize = 20; 
+                    const newTopLineFontSize = 18; 
                     const newTopLineX = downloadDateX; // Align with the other lines
                     // Calculate Y: (This moves it 20px above the download date line, assuming a 20px font for the new line)
                     const newTopLineY = downloadDateY + newTopLineFontSize + 5; 
@@ -575,7 +575,7 @@
                         y: newTopLineY, 
                         font: helveticaBoldFont, // Using bold font for emphasis
                         size: newTopLineFontSize,
-                        color: rgb(0.1, 0.1, 0.5), // A darker blue color
+                        color: rgb(1.0, 0.4, 0.7), // SL pink color (converted to 0-1 range)
                     });
                     console.log(`Drawing New Top Line at X: ${newTopLineX}, Y: ${newTopLineY}, Size: ${newTopLineFontSize}`);
                     // ******************************************************
