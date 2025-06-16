@@ -525,7 +525,7 @@
                     const noteTextLine2 = `Valid until: ${futureDateString}`;
 
                     // *** NEW LINE TO ADD ***
-                    const newTopLineText = "Official Certificate of Kindness";
+                    const newTopLineText = "Sweet Neighbor of Mine";
                     // ***********************
 
                     // 3. Get the first page of the PDF
@@ -561,7 +561,7 @@
                     const validUntilFontSize = 16;
 
                     // --- NEW LINE COORDINATES (Adjusted for "Official Certificate of Kindness") ---
-                    const newTopLineFontSize = 18; 
+                    const newTopLineFontSize = 16; 
                     const newTopLineX = downloadDateX; // Align with the other lines
                     // Calculate Y: (This moves it 20px above the download date line, assuming a 20px font for the new line)
                     const newTopLineY = downloadDateY + newTopLineFontSize + 5; 
@@ -586,7 +586,7 @@
                         y: downloadDateY, 
                         font: helveticaFont,
                         size: downloadDateFontSize,
-                        color: rgb(0.2, 0.2, 0.2), // Dark grey
+                        color: rgb(0.1, 0.1, 0.5), // Dark blue
                     });
                     console.log(`Drawing Download Date at X: ${downloadDateX}, Y: ${downloadDateY}, Size: ${downloadDateFontSize}`);
 
