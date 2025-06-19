@@ -611,6 +611,7 @@
                     const noteTextLine1 = `Download Date: ${currentDateString}`;
                     const noteTextLine2 = `Valid until: ${futureDateString}`;
 
+                    const sponsorText = "Sponsor"; // New line for "Sponsor"
                     const newTopLineText = "Sweet Neighbor of Mine";
 
                     const padTwoDigits = (num) => String(num).padStart(2, '0');
@@ -647,6 +648,11 @@
 
                     const baseLineY = height - 170;
 
+                    // New: Sponsor Text positioning
+                    const sponsorFontSize = 18; // Adjust as needed
+                    const sponsorX = 80; // Align with other text
+                    const sponsorY = baseLineY + 25; // Position above newTopLineText
+
                     const newTopLineFontSize = 18;
                     const newTopLineX = 80;
                     const newTopLineY = baseLineY;
@@ -662,6 +668,15 @@
                     const validUntilFontSize = 16;
                     const validUntilX = 80;
                     const validUntilY = downloadDateY - downloadDateFontSize - 10;
+
+                    // NEW: Draw "Sponsor"
+                    firstPage.drawText(sponsorText, {
+                        x: sponsorX,
+                        y: sponsorY,
+                        font: helveticaBoldFont, // You can choose a different font/style if desired
+                        size: sponsorFontSize,
+                        color: rgb(0.1, 0.1, 0.5), // Example color, adjust as needed
+                    });
 
                     // 1. Draw "Sweet Neighbor of Mine"
                     firstPage.drawText(newTopLineText, {
@@ -712,7 +727,6 @@
                     alert("Failed to generate certificate. Please check the console for details.");
                 }
             }
-
             viewPrintCertificateButton.addEventListener('click', generateStampedCertificate);
             // --- END PDF-LIB INTEGRATION ---
         });
