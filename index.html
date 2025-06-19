@@ -611,7 +611,7 @@
                     const noteTextLine1 = `Download Date: ${currentDateString}`;
                     const noteTextLine2 = `Valid until: ${futureDateString}`;
 
-                    const sponsorText = "Sponsor"; // New line for "Sponsor"
+                    const sponsorText = "Tercek Real Estate"; // New line for "Sponsor"
                     const newTopLineText = "Sweet Neighbor of Mine";
 
                     const padTwoDigits = (num) => String(num).padStart(2, '0');
@@ -646,22 +646,22 @@
                     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
                     const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-                    const baseLineY = height - 170;
+                    const baseLineY = height - 195;
 
                     // New: Sponsor Text positioning
-                    const sponsorFontSize = 18; // Adjust as needed
+                    const sponsorFontSize = 16; // Adjust as needed
                     const sponsorX = 80; // Align with other text
                     const sponsorY = baseLineY + 25; // Position above newTopLineText
 
-                    const newTopLineFontSize = 18;
+                    const newTopLineFontSize = 16;
                     const newTopLineX = 80;
                     const newTopLineY = baseLineY;
 
-                    const certificateNoFontSize = 14;
+                    const certificateNoFontSize = 12;
                     const certificateNoX = 80;
                     const certificateNoY = newTopLineY - newTopLineFontSize - 5;
 
-                    const downloadDateFontSize = 14;
+                    const downloadDateFontSize = 12;
                     const downloadDateX = 80;
                     const downloadDateY = certificateNoY - certificateNoFontSize - 5;
 
@@ -675,10 +675,10 @@
                         y: sponsorY,
                         font: helveticaBoldFont, // You can choose a different font/style if desired
                         size: sponsorFontSize,
-                        color: rgb(0.1, 0.1, 0.5), // Example color, adjust as needed
+                        color: rgb(8, 119, 144), // Example color, adjust as needed
                     });
 
-                    // 1. Draw "Sweet Neighbor of Mine"
+                    // 1. Draw "Kindness Project"
                     firstPage.drawText(newTopLineText, {
                         x: newTopLineX,
                         y: newTopLineY,
