@@ -646,12 +646,12 @@
                     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
                     const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-                    const baseLineY = height - 195;
+                    const baseLineY = height - 185;
 
                     // New: Sponsor Text positioning
                     const sponsorFontSize = 16; // Adjust as needed
                     const sponsorX = 80; // Align with other text
-                    const sponsorY = baseLineY + 25; // Position above newTopLineText
+                    const sponsorY = baseLineY + 20; // Position above newTopLineText
 
                     const newTopLineFontSize = 16;
                     const newTopLineX = 80;
@@ -665,9 +665,9 @@
                     const downloadDateX = 80;
                     const downloadDateY = certificateNoY - certificateNoFontSize - 5;
 
-                    const validUntilFontSize = 16;
+                    const validUntilFontSize = 14;
                     const validUntilX = 80;
-                    const validUntilY = downloadDateY - downloadDateFontSize - 10;
+                    const validUntilY = downloadDateY - downloadDateFontSize - 5;
 
                     // NEW: Draw "Sponsor"
                     firstPage.drawText(sponsorText, {
@@ -684,7 +684,7 @@
                         y: newTopLineY,
                         font: helveticaBoldFont,
                         size: newTopLineFontSize,
-                        color: rgb(1.0, 0.4, 0.7),
+                        color: rgb(235/255, 114/255, 154/255),
                     });
 
                     // 2. Draw "Certificate No."
@@ -693,7 +693,7 @@
                         y: certificateNoY,
                         font: helveticaFont,
                         size: certificateNoFontSize,
-                        color: rgb(0.1, 0.1, 0.5),
+                        color: rgb(8/255, 119/255, 144/255),
                     });
 
                     // 3. Draw "Download Date"
@@ -702,7 +702,7 @@
                         y: downloadDateY,
                         font: helveticaFont,
                         size: downloadDateFontSize,
-                        color: rgb(0.1, 0.1, 0.5),
+                        color: rgb(8/255, 119/255, 144/255),
                     });
 
                     // 4. Draw "Valid until"
